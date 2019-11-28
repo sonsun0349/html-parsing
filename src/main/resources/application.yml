@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  compression: # embedded tomcat 기동 시에 사용되는 설정. tomcat server 에서 실행할 경우는 server.xml 에 설정.
+    min-response-size: 1
+    enabled: true
+
+spring:
+  application:
+    name: homwork
+  profiles:
+    active: local # default profile
+
+# actuator config
+management:
+  security:
+    enabled: true
+    roles: SUPERUSER
+  context-path: /actuators
+
+  thymeleaf:
+    prefix: "classpath:/templates/"
+    suffix: ".html"
+# logging config
+
+---
+spring:
+  profiles: local

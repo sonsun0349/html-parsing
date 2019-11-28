@@ -1,0 +1,347 @@
+server:
+  port: 8080
+  compression: # embedded tomcat 기동 시에 사용되는 설정. tomcat server 에서 실행할 경우는 server.xml 에 설정.
+    min-response-size: 1
+    enabled: true
+
+spring:
+  application:
+    name: homwork
+  profiles:
+    active: local # default profile
+
+# actuator config
+management:
+  security:
+    enabled: true
+    roles: SUPERUSER
+  context-path: /actuators
+
+  thymeleaf:
+    prefix: "classpath:/templates/"
+    suffix: ".html"
+# logging config
+
+---
+spring:
+  profiles: local
+
+app:
+  datasource:
+    master:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.107.0.199:3306/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull
+      username: app_prod_admin
+      password: "tkdvnarhksflroqkf_!@34"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 1
+
+    slave:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.107.0.199:3306/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull
+      username: app_prod_admin
+      password: "tkdvnarhksflroqkf_!@34"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 1
+
+  elasticsearch:
+    host: http://deal-search-engine.dev.wemakeprice.com:9200
+    indices:
+      deal: deal
+      category: category
+      mng_code: mng_code
+      product: product
+      shop_category: shop_category
+      partner_seller_ship: partner_seller_ship
+    static-aliases:
+      product: product_static
+      deal: deal_static
+      shop_match_product: shop_match_product_static
+      shop_match_deal: shop_match_deal_static
+      partner_seller_ship: partner_seller_ship_static
+
+---
+spring:
+  profiles: dev
+
+  # jooq 를 사용하고 있을 경우에는 충돌이 발생할 수 있습니다.
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
+
+  # zipkin, sleuth 설정 시작.
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1.0
+
+  zipkin:
+    enabled: false
+  # zipkin, sleuth 설정 끝.
+
+app:
+  datasource:
+    master:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.107.0.199:3306/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "RmxMcFzSdk3REXay4eUi"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 3
+
+    slave:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.107.0.199:3306/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "RmxMcFzSdk3REXay4eUi"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 3
+
+  elasticsearch:
+    host: http://deal-search-engine.dev.wemakeprice.com:9200
+    indices:
+      deal: deal
+      category: category
+      mng_code: mng_code
+      product: product
+      shop_category: shop_category
+      partner_seller_ship: partner_seller_ship
+    static-aliases:
+      product: product_static
+      deal: deal_static
+      shop_match_product: shop_match_product_static
+      shop_match_deal: shop_match_deal_static
+      partner_seller_ship: partner_seller_ship_static
+
+---
+spring:
+  profiles: qa
+
+  # jooq 를 사용하고 있을 경우에는 충돌이 발생할 수 있습니다.
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
+
+  # zipkin, sleuth 설정 시작.
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1.0
+
+  zipkin:
+    enabled: false
+  # zipkin, sleuth 설정 끝.
+
+app:
+  datasource:
+    master:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.104.11.63:3306/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "RmxMcFzSdk3REXay4eUi"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 3
+
+    slave:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.104.11.63:3306/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "RmxMcFzSdk3REXay4eUi"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 3
+
+  elasticsearch:
+    host: http://deal-search-engine.qa.wemakeprice.com:9200
+    indices:
+      deal: deal
+      category: category
+      mng_code: mng_code
+      product: product
+      shop_category: shop_category
+      partner_seller_ship: partner_seller_ship
+    static-aliases:
+      product: product_static
+      deal: deal_static
+      shop_match_product: shop_match_product_static
+      shop_match_deal: shop_match_deal_static
+      partner_seller_ship: partner_seller_ship_static
+---
+spring:
+  profiles: stg
+
+  # jooq 를 사용하고 있을 경우에는 충돌이 발생할 수 있습니다.
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
+
+  # zipkin, sleuth 설정 시작.
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1.0
+
+  zipkin:
+    enabled: false
+  # zipkin, sleuth 설정 끝.
+
+app:
+  datasource:
+    master:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.200.23:3307/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "1EpaiG2Hzdt4hb12YXR9"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 3
+
+    slave:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.200.23:3307/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "1EpaiG2Hzdt4hb12YXR9"
+      max-total: 10
+      max-idle: 10
+      min-idle: 10
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 3
+
+  elasticsearch:
+    host: http://127.0.0.1:9200
+    indices:
+      deal: deal
+      category: category
+      mng_code: mng_code
+      product: product
+      shop_category: shop_category
+      partner_seller_ship: partner_seller_ship
+    static-aliases:
+      product: product_static
+      deal: deal_static
+      shop_match_product: shop_match_product_static
+      shop_match_deal: shop_match_deal_static
+      partner_seller_ship: partner_seller_ship_static
+---
+spring:
+  profiles: prod
+
+  # jooq 를 사용하고 있을 경우에는 충돌이 발생할 수 있습니다.
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
+
+  # zipkin, sleuth 설정 시작.
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1.0
+
+  zipkin:
+    enabled: false
+  # zipkin, sleuth 설정 끝.
+
+app:
+  datasource:
+    master:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.12.10:3306/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "tmvldzmtm!@#"
+      max-total: 100
+      max-idle: 100
+      min-idle: 100
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 10
+
+    slave:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.1.30:28000/wmp_deal?useUnicode=true&characterEncoding=utf-8&connectionCollation=utf8_bin&characterSetResults=utf8&serverTimezone=Asia/Seoul&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnectForPools=true
+      username: app_search
+      password: "tmvldzmtm!@#"
+      max-total: 100
+      max-idle: 100
+      min-idle: 100
+      max-wait-millis: 3000
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 10000
+      test-on-borrow: true
+      default-auto-commit: true
+      initial-size: 10
+
+  elasticsearch:
+    host: http://127.0.0.1:9200
+    indices:
+      deal: deal
+      category: category
+      mng_code: mng_code
+      product: product
+      shop_category: shop_category
+      partner_seller_ship: partner_seller_ship
+    static-aliases:
+      product: product_static
+      deal: deal_static
+      shop_match_product: shop_match_product_static
+      shop_match_deal: shop_match_deal_static
+      partner_seller_ship: partner_seller_ship_static
